@@ -9,22 +9,25 @@ class KMeans:
         self.k = k
         self.picture = picture
         self.centroids = init_centroids(X=picture, K=k)
-        # self.related_centroids_vector = [0 for _ in range(len(picture))]
-        self.centroid_to_pixels = {centroid: [] for centroid in self.centroids}
+        self.centroid_to_pixels = {centroid_index: [] for centroid_index in range(len(self.centroids))}
 
     def run_k_means(self, max_iterations):
+        print('k={}:'.format(self.k))
         for iteration in range(max_iterations):
-            print('iter {}: {}'.format(iteration, self.centroids))
+            print('iter {}: {}'.format(iteration, np.floor(self.centroids * 100) / 100))
 
             # find the closest centroid for each pixel
             for pixel_index, pixel in enumerate(self.picture):
-                min_centroid, min_dist = None, float('inf')
-                for centroid in self.centroids:
+                min_centroid_index, min_dist = None, float('inf')
+                for index, centroid in enumerate(self.centroids):
                     dist = np.linalg.norm(pixel - centroid)
                     if dist < min_dist:
-                        min_centroid, min_dist = centroid, dist
+                        min_centroid_index, min_dist = index, dist
 
-                self.centroid_to_pixels[centroid].append(pixel)  # assign the pixel to the closest centroid
+                # assign the pixel to the closest centroid
+                self.centroid_to_pixels[min_centroid_index].append(pixel)
 
-            for centroid in self.centroids:
-                total_sum = 0
+            for centroid_index, list_of_pixels in self.centroid_to_pixels.items():
+                # update the new centroid as the mean of all pixels
+                self.centroids[centroid_index] = sum(list_of_pixels) / len(list_of_pixels)
+            

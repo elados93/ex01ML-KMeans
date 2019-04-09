@@ -13,7 +13,10 @@ A = A.astype(float) / 255.
 img_size = A.shape
 X = A.reshape(img_size[0] * img_size[1], img_size[2])
 
-print(len(X))
-
-algorithm = KMeans(k=16, picture=X)
-algorithm.run_k_means(max_iterations=10)
+for k in [2,
+          4,
+          8,
+          16
+          ]:
+    algorithm = KMeans(k=k, picture=X)
+    algorithm.run_k_means(max_iterations=10)
