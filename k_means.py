@@ -17,6 +17,7 @@ class KMeans:
         self.centroids = init_centroids(X=picture, K=k)
         self.centroid_to_pixels = self.reset_centroids_dict()
         self.pixels_to_centroids = {}
+        self.average_loss = []
 
     def reset_centroids_dict(self):
         return {centroid_index: [] for centroid_index in range(self.k)}
@@ -26,6 +27,7 @@ class KMeans:
         for iteration in range(max_iterations + 1):
             print('iter {}: {}'.format(iteration, self.print_cent()))
 
+            loss_sum = 0
             # find the closest centroid for each pixel
             for pixel_index, pixel in enumerate(self.picture):
                 min_centroid_index, min_dist = None, float('inf')
@@ -38,6 +40,10 @@ class KMeans:
                 # assign the pixel to the closest centroid
                 self.centroid_to_pixels[min_centroid_index].append(pixel)
                 self.pixels_to_centroids[tuple(pixel)] = min_centroid_index
+                loss_sum += min_dist
+
+            # calculate the average loss of the iteration
+            self.average_loss.append(loss_sum / self.picture.shape[0])
 
             # update all centroids as the mean of their pixels
             for centroid_index, list_of_pixels in self.centroid_to_pixels.items():
@@ -54,6 +60,12 @@ class KMeans:
         for index, pixel in enumerate(self.picture):
             centroid_index = self.pixels_to_centroids[tuple(pixel)]
             result_vec[index] = self.centroids[centroid_index]
+
+        plt.plot(self.average_loss)
+        plt.title('K-Means Average Loss, k = {}'.format(self.k))
+        plt.ylabel('Average Loss')
+        plt.xlabel('Iteration')
+        plt.show()
 
         # showing the image
         picture_len = int(math.sqrt(img_size[0]))
