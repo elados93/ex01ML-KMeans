@@ -1,7 +1,7 @@
-import numpy as np
-import scipy.io as sio
-import matplotlib.pyplot as plt
-
+"""
+Name: Elad Aharon
+ID: 311200786
+"""
 from scipy.misc import imread
 from k_means import KMeans
 
@@ -13,10 +13,6 @@ A = A.astype(float) / 255.
 img_size = A.shape
 X = A.reshape(img_size[0] * img_size[1], img_size[2])
 
-for k in [2,
-          4,
-          8,
-          16
-          ]:
+for k in [2, 4, 8, 16]:
     algorithm = KMeans(k=k, picture=X)
     algorithm.run_k_means(max_iterations=10)
