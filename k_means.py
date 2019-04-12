@@ -40,7 +40,7 @@ class KMeans:
                 # assign the pixel to the closest centroid
                 self.centroid_to_pixels[min_centroid_index].append(pixel)
                 self.pixels_to_centroids[tuple(pixel)] = min_centroid_index
-                loss_sum += min_dist
+                loss_sum += min_dist ** 2
 
             # calculate the average loss of the iteration
             self.average_loss.append(loss_sum / self.picture.shape[0])
@@ -61,19 +61,21 @@ class KMeans:
             centroid_index = self.pixels_to_centroids[tuple(pixel)]
             result_vec[index] = self.centroids[centroid_index]
 
-        plt.plot(self.average_loss)
-        plt.title('K-Means Average Loss, k = {}'.format(self.k))
-        plt.ylabel('Average Loss')
-        plt.xlabel('Iteration')
-        plt.show()
+        # plt.plot(self.average_loss)
+        # plt.title('K-Means Average Loss, k = {}'.format(self.k))
+        # plt.ylabel('Average Loss')
+        # plt.xlabel('Iteration')
+        # for i, loss in enumerate(self.average_loss):
+        #     plt.text(i, loss, str(np.floor(10000 * loss) / 10000))
+        # plt.show()
 
         # showing the image
-        picture_len = int(math.sqrt(img_size[0]))
-        picture_after_k_means = result_vec.reshape(picture_len, picture_len, img_size[1])
-        plt.imshow(picture_after_k_means)
-        plt.grid(False)
-        plt.show()
-
+        # picture_len = int(math.sqrt(img_size[0]))
+        # picture_after_k_means = result_vec.reshape(picture_len, picture_len, img_size[1])
+        # plt.imshow(picture_after_k_means)
+        # plt.grid(False)
+        # plt.title('K = {}'.format(self.k))
+        # plt.show()
 
     def print_cent(self):
         """
